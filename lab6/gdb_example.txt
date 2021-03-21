@@ -1,0 +1,229 @@
+Script started on Thu 14 Feb 2019 09:25:57 PM EST
+]0;trainada@wolf:/h/u3/c8/04/trainada/CSC209/trainada/lab6wolf:~/CSC209/trainada/lab6$ gcc -Wall -std=gnu99 -g -o overflow overflow.c
+]0;trainada@wolf:/h/u3/c8/04/trainada/CSC209/trainada/lab6wolf:~/CSC209/trainada/lab6$ gdb
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word".
+(gdb) quit
+]0;trainada@wolf:/h/u3/c8/04/trainada/CSC209/trainada/lab6wolf:~/CSC209/trainada/lab6$ gdb overflow
+GNU gdb (Ubuntu 7.11.1-0ubuntu1~16.5) 7.11.1
+Copyright (C) 2016 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from overflow...done.
+(gdb) list 0, 40
+Line number 0 out of range; overflow.c has 45 lines.
+(gdb) list 0, 40[1P[1@1
+1       #include <stdio.h>
+2       
+3       #define SIZE 4
+4       #define OVERFLOW 5 
+5       
+6       int main() {
+7           int index = 0;
+8           int i;
+9           int before[SIZE] = {10, 10, 10, 10};
+10          int a[SIZE] = {0, 0, 0, 0};
+11          int after[SIZE] = {10, 10, 10, 10};
+12      
+13          printf("Address of the variables:\n");
+14          for (index = 0; index < SIZE; index++) {
+15              printf("%lx -> &after[%d]\n", (unsigned long) &after[index], index);
+16          }
+17          for (index = 0; index < SIZE; index++) {
+18              printf("%lx -> &a[%d]\n", (unsigned long) &a[index], index);
+19          }
+20          for (index = 0; index < SIZE; index++) {
+21              printf("%lx -> &before[%d]\n", (unsigned long) &before[index], index);
+22          }
+23          printf("%lx -> &i\n", (unsigned long)&i);
+24          printf("%lx -> &index\n", (unsigned long)&index);
+25          printf("\n");
+26      
+27      
+28          printf("Initial values:\n");
+29          printf("i = %d\n", i);
+30          printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+31          printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+32          printf("after = {%d, %d, %d, %d}\n", after[0], after[1], after[2], after[3]);
+33          printf("\n");
+34      
+35      
+---Type <return> to continue, or q <return> to quit---[K---Type <return> to continue, or q <return> to quit---list
+36          for (i = 0; i < OVERFLOW; i++) {
+37              a[i] = i * 10;
+38              printf("i = %d\n", i);
+39              printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+40              printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+(gdb) break 37
+Breakpoint 1 at 0x40083b: file overflow.c, line 37.
+(gdb) break 36
+Breakpoint 2 at 0x40082f: file overflow.c, line 36.
+(gdb) [K(gdb) [K(gdb) run
+Starting program: /h/u3/c8/04/trainada/CSC209/trainada/lab6/overflow 
+Address of the variables:
+7fffffffea10 -> &after[0]
+7fffffffea14 -> &after[1]
+7fffffffea18 -> &after[2]
+7fffffffea1c -> &after[3]
+7fffffffea00 -> &a[0]
+7fffffffea04 -> &a[1]
+7fffffffea08 -> &a[2]
+7fffffffea0c -> &a[3]
+7fffffffe9f0 -> &before[0]
+7fffffffe9f4 -> &before[1]
+7fffffffe9f8 -> &before[2]
+7fffffffe9fc -> &before[3]
+7fffffffe9ec -> &i
+7fffffffe9e8 -> &index
+
+Initial values:
+i = 0
+before = {10, 10, 10, 10}
+a = {0, 0, 0, 0}
+after = {10, 10, 10, 10}
+
+
+Breakpoint 2, main () at overflow.c:36
+36          for (i = 0; i < OVERFLOW; i++) {
+(gdb) continue[K[K[K[K[K[K[K[Kdisplay after[0]
+1: after[0] = 10
+(gdb) next
+
+Breakpoint 1, main () at overflow.c:37
+37              a[i] = i * 10;
+1: after[0] = 10
+(gdb) next
+38              printf("i = %d\n", i);
+1: after[0] = 10
+(gdb) next
+i = 0
+39              printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+1: after[0] = 10
+(gdb) next
+before = {10, 10, 10, 10}
+40              printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+1: after[0] = 10
+(gdb) next
+a = {0, 0, 0, 0}
+41              printf("after = {%d, %d, %d, %d}\n", after[0], after[1], after[2], after[3]);
+1: after[0] = 10
+(gdb) next
+after = {10, 10, 10, 10}
+36          for (i = 0; i < OVERFLOW; i++) {
+1: after[0] = 10
+(gdb) next
+
+Breakpoint 1, main () at overflow.c:37
+37              a[i] = i * 10;
+1: after[0] = 10
+(gdb) next
+38              printf("i = %d\n", i);
+1: after[0] = 10
+(gdb) next
+i = 1
+39              printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+1: after[0] = 10
+(gdb) next
+before = {10, 10, 10, 10}
+40              printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+1: after[0] = 10
+(gdb) next
+a = {0, 10, 0, 0}
+41              printf("after = {%d, %d, %d, %d}\n", after[0], after[1], after[2], after[3]);
+1: after[0] = 10
+(gdb) next
+after = {10, 10, 10, 10}
+36          for (i = 0; i < OVERFLOW; i++) {
+1: after[0] = 10
+(gdb) next
+
+Breakpoint 1, main () at overflow.c:37
+37              a[i] = i * 10;
+1: after[0] = 10
+(gdb) next
+38              printf("i = %d\n", i);
+1: after[0] = 10
+(gdb) next
+i = 2
+39              printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+1: after[0] = 10
+(gdb) next
+before = {10, 10, 10, 10}
+40              printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+1: after[0] = 10
+(gdb) next
+a = {0, 10, 20, 0}
+41              printf("after = {%d, %d, %d, %d}\n", after[0], after[1], after[2], after[3]);
+1: after[0] = 10
+(gdb) next
+after = {10, 10, 10, 10}
+36          for (i = 0; i < OVERFLOW; i++) {
+1: after[0] = 10
+(gdb) next
+
+Breakpoint 1, main () at overflow.c:37
+37              a[i] = i * 10;
+1: after[0] = 10
+(gdb) next
+38              printf("i = %d\n", i);
+1: after[0] = 10
+(gdb) next
+i = 3
+39              printf("before = {%d, %d, %d, %d}\n", before[0], before[1], before[2], before[3]);
+1: after[0] = 10
+(gdb) next
+before = {10, 10, 10, 10}
+40              printf("a = {%d, %d, %d, %d}\n", a[0], a[1], a[2], a[3]);
+1: after[0] = 10
+(gdb) next
+a = {0, 10, 20, 30}
+41              printf("after = {%d, %d, %d, %d}\n", after[0], after[1], after[2], after[3]);
+1: after[0] = 10
+(gdb) next
+after = {10, 10, 10, 10}
+36          for (i = 0; i < OVERFLOW; i++) {
+1: after[0] = 10
+(gdb) next
+
+Breakpoint 1, main () at overflow.c:37
+37              a[i] = i * 10;
+1: after[0] = 10
+(gdb) next
+38              printf("i = %d\n", i);
+1: after[0] = 40
+(gdb) print &(after[0])
+$1 = (int *) 0x7fffffffea10
+(gdb) print &(a[4])
+$2 = (int *) 0x7fffffffea10
+(gdb) exit[K[K[K[Kquit
+A debugging session is active.
+
+        Inferior 1 [process 48675] will be killed.
+
+Quit anyway? (y or n) y
+]0;trainada@wolf:/h/u3/c8/04/trainada/CSC209/trainada/lab6wolf:~/CSC209/trainada/lab6$ exit
+exit
+
+Script done on Thu 14 Feb 2019 09:32:01 PM EST

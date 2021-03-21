@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/CS/CSC209/trainada/a2/family.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+time.h
+-
+family.h
+C:/CS/CSC209/trainada/a2/family.h
+
+C:/CS/CSC209/trainada/a2/family.h
+
